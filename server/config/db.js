@@ -4,9 +4,9 @@ const { Sequelize } = require("sequelize");
 
 // Create a new Sequelize instance
 const sequelize = new Sequelize(
-  "your_database_name",
-  "your_username",
-  "your_password",
+  "skill_exchange_platform",
+  "root",
+  "9326115",
   {
     host: "localhost",
     dialect: "mariadb", // Use 'mariadb' as the dialect
