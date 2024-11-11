@@ -1,0 +1,167 @@
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #007bff;
+  color: #fff;
+}
+
+.navbar nav a {
+  margin: 0 10px;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Search Section */
+.search-section {
+  padding: 20px;
+  text-align: center;
+}
+
+.search-bar {
+  width: 50%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Content */
+.content {
+  display: flex;
+  padding: 20px;
+}
+
+.filter-options {
+  width: 20%;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-right: 1px solid #ddd;
+}
+
+.filter-group {
+  margin-bottom: 20px;
+}
+
+.filter-group h4 {
+  margin-bottom: 10px;
+}
+
+.popularity-slider {
+  width: 100%;
+}
+
+.skills-content {
+  width: 80%;
+  padding: 20px;
+  margin-top: 40px; /* Increased margin-top for gap between sections */
+}
+
+/* Skill Cards */
+.skill-card {
+  width: 30%;
+  display: inline-block;
+  margin: 10px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.skill-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.skill-card button {
+  margin-top: 10px;
+  background-color: #ee735e;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* View All Categories Button */
+.view-all-categories {
+  display: block;
+  margin-top: 30px; /* Increased space between categories and button */
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* Mentor Cards */
+.mentor-availability {
+  margin-top: 60px; /* Increased gap between categories and mentor section */
+  padding: 20px;
+}
+
+.mentor-card {
+  display: inline-block;
+  width: 30%;
+  margin: 10px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.mentor-card img {
+  height: 150px;
+  width: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+
+.mentor-card button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Recommended Skills */
+.recommended-skills {
+  margin-top: 30px;
+}
+
+.recommended-skill {
+  display: inline-block;
+  background-color: #f0f0f0;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  color: #333;
+}
+
+/* Footer */
+.footer {
+  padding: 20px;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.request-skill,
+.become-mentor {
+  margin: 5px;
+  padding: 10px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

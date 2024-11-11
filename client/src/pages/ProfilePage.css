@@ -1,0 +1,154 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 24px;
+  color: #0065a2;
+}
+
+nav a {
+  margin: 0 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+.profile-icon {
+  font-size: 18px;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.profile-info h2 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.profile-info p {
+  margin: 5px 0 15px;
+  font-size: 14px;
+  color: #555;
+}
+
+.edit-profile-btn {
+  background-color: #0065a2;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.skills-section,
+.projects-section,
+.contributions-section,
+.portfolio-section {
+  margin-bottom: 20px;
+}
+
+.skills {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.skills-section h3 {
+  margin-bottom: 20px; /* Adds space between the "Skills & Expertise" heading and the skill tags */
+}
+
+.skill {
+  background-color: #d1e7f3;
+  color: #0065a2;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.add-skill-btn {
+  background-color: #0065a2;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.projects-section .project {
+  background-color: #f1f1f1;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.projects-section h3 {
+  margin-bottom: 30px;
+}
+
+.view-project-btn {
+  background-color: #0065a2;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.contributions-section p {
+  margin-bottom: 8px;
+}
+
+.contributions-section h3 {
+  margin-bottom: 20px;
+}
+
+.portfolio-items {
+  display: flex;
+  gap: 10px;
+}
+
+.portfolio-item {
+  display: inline-block;
+  padding: 8px 10px;
+  background-color: #d1e7f3;
+  color: #0065a2;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.portfolio-section h3 {
+  margin-bottom: 20px;
+}
+
+.settings-btn {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}

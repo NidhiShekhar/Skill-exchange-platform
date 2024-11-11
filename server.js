@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require('cors');
 require('dotenv').config();
-const sequelize = require("./config/db");
+const sequelize = require("./server/config/sequelize");
 
 const app = express();
 
@@ -17,6 +17,16 @@ sequelize
   .authenticate()
   .then(() => console.log("Database connected..."))
   .catch((err) => console.log("Error: " + err));
+
+  // Add a route for testing DB connectivity
+app.get('/db-test', async (req, res) => {
+    try {
+        const result = await sequelize.query('SELECT 1+1 AS result');
+        res.json({ message: 'Database is connected', data: result });
+    } catch (err) {
+        res.status(500).json({ message: 'Error connecting to database', error: err });
+    }
+});
 
 // Define routes
 app.get('/', (req, res) => {

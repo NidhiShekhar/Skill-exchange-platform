@@ -1,0 +1,32 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.navbar-title {
+  font-size: 24px;
+  color: #000; /* Black color */
+}
+
+.navbar-links {
+  display: flex;
+  gap: 15px;
+}
+
+.navbar-links a {
+  color: #333;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.navbar-links a:hover {
+  color: #0065a2;
+}
+
+.profile-icon {
+  font-size: 18px;
+}

@@ -1,0 +1,71 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.about-us-container {
+  width: 100%;
+  height: 100vh; /* Ensures the page fills the screen */
+  padding: 20px;
+  overflow-x: hidden; /* Prevent horizontal overflow */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Distribute space between sections */
+}
+
+.mission-section,
+.how-it-works-section,
+.values-section,
+.contact-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.mission-section h2,
+.how-it-works-section h2,
+.values-section h2,
+.contact-section h2 {
+  color: #0065a2;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.mission-section p,
+.how-it-works-section p,
+.values-section ul,
+.contact-section p {
+  font-size: 16px;
+  color: #555;
+}
+
+.values-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.values-section ul li {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.values-section ul li strong {
+  color: #0065a2;
+}
+
+.contact-section a {
+  color: #0065a2;
+  text-decoration: none;
+}
+
+.contact-section a:hover {
+  text-decoration: underline;
+}
