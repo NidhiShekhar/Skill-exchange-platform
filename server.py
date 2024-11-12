@@ -39,7 +39,9 @@ def signup():
             (username, email, password_hash, full_name, role),
         )
         conn.commit()
-        return jsonify({"message": "User created successfully"}), 201
+        cursor.execute("SELECT user_id FROM Users WHERE username = %s", (username,))
+        user_id = cursor.fetchone()[0]
+        return jsonify({"message": "User created successfully", "user_id":user_id}), 201
     except mysql.connector.IntegrityError:
         return jsonify({"error": "Username or email already exists."}), 409
     finally:
