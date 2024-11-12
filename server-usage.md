@@ -145,3 +145,10 @@
 - **Description:** Lists all projects of a specific user.
 - **Response:**
   - **200 OK:** Returns a list of projects for the user.
+
+#### 12. **List All Skills**
+- **Endpoint:** `/skills`
+- **Method:** GET
+- **Description:** Lists all skills.
+- **Response:**
+  - **200 OK:** Returns a list of all skills.

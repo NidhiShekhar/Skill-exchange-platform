@@ -3,22 +3,16 @@ from flask_cors import CORS
 import mysql.connector
 import os
 import bcrypt
-
-
 app = Flask(__name__)
 CORS(app)
 
-# Database configuration
-db_config = {
-    "user": os.getenv("DB_USER", "your_db_user"),
-    "password": os.getenv("DB_PASSWORD", "your_db_password"),
-    "host": os.getenv("DB_HOST", "localhost"),
-    "database": os.getenv("DB_NAME", "your_db_name"),
-}
-
 
 def get_db_connection():
-    return mysql.connector.connect(**db_config)
+    with open(".passwd.txt", "r") as file:
+        passwd = file.read().strip()
+    return mysql.connector.connect(
+        host="bar0n.live", user="skill_exchange", password=passwd, database="skill_exchange_platform"
+    )
 
 
 # User signup endpoint
@@ -323,6 +317,45 @@ def list_user_projects(user_id):
         )
         user_projects = cursor.fetchall()
         return jsonify(user_projects), 200
+    finally:
+        cursor.close()
+        conn.close()
+
+# Endpoint to list all skills
+@app.route("/skills", methods=["GET"])
+def list_skills():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM Skills")
+        skills = cursor.fetchall()
+        return jsonify(skills), 200
+    finally:
+        cursor.close()
+        conn.close()
+
+# Endpoint to list all projects
+@app.route("/projects", methods=["GET"])
+def list_projects():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM Projects")
+        projects = cursor.fetchall()
+        return jsonify(projects), 200
+    finally:
+        cursor.close()
+        conn.close()
+
+# Endpoint to list all users
+@app.route("/users", methods=["GET"])
+def list_users():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM Users")
+        users = cursor.fetchall()
+        return jsonify(users), 200
     finally:
         cursor.close()
         conn.close()
