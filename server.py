@@ -19,6 +19,7 @@ def get_db_connection():
 @app.route("/signup", methods=["POST"])
 def signup():
     data = request.json
+    print(data)
     username = data.get("username")
     email = data.get("email")
     password = data.get("password")
@@ -353,13 +354,33 @@ def list_users():
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM Users")
+        cursor.execute("SELECT username, user_id FROM Users")
         users = cursor.fetchall()
         return jsonify(users), 200
     finally:
         cursor.close()
         conn.close()
 
+# Endpoint to list all skills of a specific user
+@app.route("/user-skills/<int:user_id>", methods=["GET"])
+def list_user_skills(user_id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            """
+            SELECT Skills.skill_name, UserSkills.proficiency_level
+            FROM UserSkills
+            JOIN Skills ON UserSkills.skill_id = Skills.skill_id
+            WHERE UserSkills.user_id = %s
+            """,
+            (user_id,),
+        )
+        user_skills = cursor.fetchall()
+        return jsonify(user_skills), 200
+    finally:
+        cursor.close()
+        conn.close()
 
 if __name__ == "__main__":
     app.run(host="localhost", port=5000, debug=True)
