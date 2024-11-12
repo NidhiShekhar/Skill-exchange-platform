@@ -9,11 +9,17 @@ import dataScienceImg from "../assets/data-science.jpeg";
 import mentor1Img from "../assets/mentor1.jpeg";
 import mentor2Img from "../assets/mentor2.jpeg";
 import mentor3Img from "../assets/mentor3.jpeg";
+import {useLocation, useNavigate} from "react-router-dom";
 
 function Skills() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const user_id = location.state?.user_id;
+  const username = location.state?.username;
+  console.log(user_id, username);
   return (
     <>
-      <Navbar />
+      <Navbar user_id={user_id} username={username}/>
       <div className="skills-page">
         <div className="search-section">
           <input

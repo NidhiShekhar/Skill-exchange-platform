@@ -6,12 +6,18 @@ import Navbar from "./Navbar";
 import icon1 from "../assets/icon1.png";
 import icon2 from "../assets/icon2.png";
 import icon3 from "../assets/icon3.png";
-import homepageImage from "../assets/homepage.png"; // Import the homepage image
+import homepageImage from "../assets/homepage.png";
+import { useLocation, useNavigate } from "react-router-dom";// Import the homepage image
 
 function HomePage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const user_id = location.state?.user_id;
+  const username = location.state?.username;
+  console.log(user_id, username);
   return (
     <div>
-      <Navbar />
+      <Navbar user_id={user_id} username={username}/>
 
       <div className="home-container">
         <div className="home-image">

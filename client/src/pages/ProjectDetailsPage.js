@@ -1,137 +1,127 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./ProjectDetailsPage.css";
 import Navbar from "./Navbar";
-
-// Import images
-import creativeGraphicDesign from "../assets/creative-graphic-design.jpg";
-import marketResearch from "../assets/market-research.jpeg";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function ProjectDetailsPage() {
+  const [projects, setProjects] = useState([]);
+  const [skills, setSkills] = useState([]);
+  const [statuses, setStatuses] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const user_id = location.state?.user_id;
+  const username = location.state?.username;
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/projects");
+        setProjects(response.data);
+
+        const uniqueSkills = [...new Set(response.data.flatMap(project => project.skills.map(skill => skill[1])))];
+        setSkills(uniqueSkills);
+
+        const uniqueStatuses = [...new Set(response.data.map(project => project.status))];
+        setStatuses(uniqueStatuses);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  const handleSkillChange = (skill) => {
+    setSelectedSkills(prev =>
+        prev.includes(skill) ? prev.filter(s => s !== skill) : [...prev, skill]
+    );
+  };
+
+  const handleStatusChange = (status) => {
+    setSelectedStatuses(prev =>
+        prev.includes(status) ? prev.filter(s => s !== status) : [...prev, status]
+    );
+  };
+
+  const filteredProjects = projects.filter(project =>
+      (selectedSkills.length === 0 || project.skills.some(skill => selectedSkills.includes(skill[1]))) &&
+      (selectedStatuses.length === 0 || selectedStatuses.includes(project.status)) &&
+      (searchQuery === "" || project.title.toLowerCase().includes(searchQuery.toLowerCase()) || project.description.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
   return (
-    <>
-      <Navbar />
-      <div className="project-details-container">
-        <input
-          type="text"
-          placeholder="Search Projects..."
-          className="search-bar"
-        />
+      <>
+        <Navbar user_id={user_id} username={username} />
+        <div className="project-details-container">
+          <input
+              type="text"
+              placeholder="Search Projects..."
+              className="search-bar"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+          />
 
-        <div className="content">
-          <aside className="filters">
-            <h3>Filters</h3>
-            <section>
-              <h4>Categories</h4>
-              <label>
-                <input type="checkbox" /> Technology
-              </label>
-              <label>
-                <input type="checkbox" /> Business
-              </label>
-              <label>
-                <input type="checkbox" /> Design
-              </label>
-            </section>
-            <section>
-              <h4>Skill Level</h4>
-              <label>
-                <input type="checkbox" /> Beginner
-              </label>
-              <label>
-                <input type="checkbox" /> Intermediate
-              </label>
-              <label>
-                <input type="checkbox" /> Advanced
-              </label>
-            </section>
-            <section>
-              <h4>Project Type</h4>
-              <label>
-                <input type="checkbox" /> Short-term
-              </label>
-              <label>
-                <input type="checkbox" /> Long-term
-              </label>
-            </section>
-            <section>
-              <h4>Project Status</h4>
-              <label>
-                <input type="checkbox" /> Open
-              </label>
-              <label>
-                <input type="checkbox" /> In Progress
-              </label>
-              <label>
-                <input type="checkbox" /> Completed
-              </label>
-            </section>
-          </aside>
+          <div className="content">
+            <aside className="filters">
+              <h3>Filters</h3>
+              <section>
+                <h4>Skills</h4>
+                {skills.map(skill => (
+                    <label key={skill}>
+                      <input
+                          type="checkbox"
+                          checked={selectedSkills.includes(skill)}
+                          onChange={() => handleSkillChange(skill)}
+                      />
+                      {skill}
+                    </label>
+                ))}
+              </section>
+              <section>
+                <h4>Project Status</h4>
+                {statuses.map(status => (
+                    <label key={status}>
+                      <input
+                          type="checkbox"
+                          checked={selectedStatuses.includes(status)}
+                          onChange={() => handleStatusChange(status)}
+                      />
+                      {status}
+                    </label>
+                ))}
+              </section>
+            </aside>
 
-          <main className="project-explorer">
-            <header className="explore-header">
-              <h2>Explore Projects</h2>
-              <div className="sort-by">Sort By : Relevance</div>
-            </header>
+            <main className="project-explorer">
+              <header className="explore-header">
+                <h2>Explore Projects</h2>
+              </header>
 
-            <div className="project-cards">
-              <div className="project-card">
-                <img
-                  src={creativeGraphicDesign}
-                  alt="Creative Graphic Design"
-                />
-                <h3>Creative Graphic Design</h3>
-                <p>
-                  Design innovative graphics for promotional materials and
-                  online content.
-                </p>
-                <div className="tags">
-                  <span className="tag">Design</span>
-                  <span className="tag">Advanced</span>
-                  <span className="tag completed">Completed</span>
-                </div>
-                <button className="view-details-btn">View Details</button>
+              <div className="project-cards">
+                {filteredProjects.map((project) => (
+                    <div key={project.project_id} className="project-card">
+                      <h3>{project.title}</h3>
+                      <p>{project.description}</p>
+                      <div className="tags">
+                        {project.skills.map(skill => (
+                            <span key={skill[0]} className="tag">{skill[1]}</span>
+                        ))}
+                        <span className={`tag ${project.status.toLowerCase()}`}>
+                      {project.status}
+                    </span>
+                      </div>
+                      <button className="view-details-btn">View Details</button>
+                    </div>
+                ))}
               </div>
-
-              <div className="project-card">
-                <img src={marketResearch} alt="Market Research Analysis" />
-                <h3>Market Research Analysis</h3>
-                <p>
-                  Conduct comprehensive research to identify market trends and
-                  opportunities.
-                </p>
-                <div className="tags">
-                  <span className="tag">Business</span>
-                  <span className="tag">Beginner</span>
-                  <span className="tag in-progress">In Progress</span>
-                </div>
-                <button className="join-project-btn">Join Project</button>
-              </div>
-            </div>
-
-            <div className="pagination">
-              <button className="pagination-btn">Previous</button>
-              <button className="pagination-btn">Next</button>
-            </div>
-          </main>
-
-          <aside className="featured-projects">
-            <h3>Featured Projects</h3>
-            <div className="featured-project">
-              <p>Blockchain Implementation</p>
-              <span className="tag">Technology</span>
-            </div>
-            <div className="featured-project">
-              <p>Digital Marketing Strategy</p>
-              <span className="tag">Business</span>
-            </div>
-            <div className="featured-project">
-              <p>3D Animation</p>
-              <span className="tag">Design</span>
-            </div>
-          </aside>
+            </main>
+          </div>
         </div>
-      </div>
-    </>
+      </>
   );
 }
 
