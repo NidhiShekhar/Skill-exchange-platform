@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./ProjectDetailsPage.css";
 import Navbar from "./Navbar";
 import { useLocation, useNavigate } from "react-router-dom";
+import "./ProjectDetailsPage.css";
 
 function ProjectDetailsPage() {
   const [projects, setProjects] = useState([]);
@@ -77,7 +77,7 @@ function ProjectDetailsPage() {
                           checked={selectedSkills.includes(skill)}
                           onChange={() => handleSkillChange(skill)}
                       />
-                      {skill}
+                      <span>{skill}</span>
                     </label>
                 ))}
               </section>
@@ -90,7 +90,7 @@ function ProjectDetailsPage() {
                           checked={selectedStatuses.includes(status)}
                           onChange={() => handleStatusChange(status)}
                       />
-                      {status}
+                      <span>{status}</span>
                     </label>
                 ))}
               </section>

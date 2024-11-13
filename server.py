@@ -143,6 +143,26 @@ def add_skill_to_user():
         cursor.close()
         conn.close()
 
+# Endpoint to list all users with a specific skill by skill ID
+@app.route("/users-with-skill-id/<int:skill_id>", methods=["GET"])
+def list_users_with_skill_by_id(skill_id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            """
+            SELECT Users.user_id, Users.username, Users.full_name, UserSkills.proficiency_level
+            FROM UserSkills
+            JOIN Users ON UserSkills.user_id = Users.user_id
+            WHERE UserSkills.skill_id = %s
+            """,
+            (skill_id,),
+        )
+        users_with_skill = cursor.fetchall()
+        return jsonify(users_with_skill), 200
+    finally:
+        cursor.close()
+        conn.close()
 
 # Endpoint to list all users with a specific skill
 @app.route("/users-with-skill", methods=["GET"])
@@ -203,7 +223,11 @@ def add_project():
             (title, description, creator_id, status),
         )
         conn.commit()
-        return jsonify({"message": "Project added successfully"}), 201
+        cursor.execute(
+            "SELECT project_id FROM Projects WHERE title = %s", (title,)
+        )
+        project_id = cursor.fetchone()[0] #fetches the project id from the database, cuz how the fuck will the front end randomly imagine the project id?
+        return jsonify({"message": "Project added successfully", "project_id": project_id }), 201
     finally:
         cursor.close()
         conn.close()

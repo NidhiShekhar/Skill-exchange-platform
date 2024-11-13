@@ -1,0 +1,14 @@
+you need to create an update project endpoint to update the project's status so from open to running or whatever.
+this is backend server work
+
+
+you need to be able to add skill to the project. to do this, first get all available skills from the skill endpoint along with the skill id. once that is loaded,
+it should go in a dropdown that lets the user select the skill(s) to add to their project. and then that must make a post request to the project skill endpoint
+with project id and skill id.
+give it all the endpoints necessary for this.
+this is frontend work
+
+1. do error handling on 409 error in signup page (signing up with the same creds.)
+2. do error handling on 409 error in login page (logging in with the wrong creds.)
+
+

@@ -13,6 +13,16 @@ const ProfilePage = () => {
   const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
   const [proficiencyLevel, setProficiencyLevel] = useState("beginner");
+  const [projects, setProjects] = useState([]);
+  const [newProject, setNewProject] = useState({
+    title: '',
+    description: '',
+    creator_id: user_id,
+    status: 'open'
+  });
+  const [availableSkills, setAvailableSkills] = useState([]);
+  const [selectedSkill, setSelectedSkill] = useState("");
+  const [selectedProject, setSelectedProject] = useState("");
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -24,8 +34,44 @@ const ProfilePage = () => {
       }
     };
 
+    const fetchProjects = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/user-projects/${user_id}`);
+        setProjects(response.data);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
+    const fetchAvailableSkills = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/skills');
+        setAvailableSkills(response.data);
+      } catch (error) {
+        console.error("Error fetching available skills:", error);
+      }
+    };
+
     fetchSkills();
+    fetchProjects();
+    fetchAvailableSkills();
   }, [user_id]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewProject({ ...newProject, [name]: value });
+  };
+
+  const handleAddProject = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/projects', newProject);
+      const { project_id } = response.data;
+      setProjects([...projects, { ...newProject, project_id }]);
+      setNewProject({ title: '', description: '', creator_id: user_id, status: 'open' });
+    } catch (error) {
+      console.error('Error adding project:', error);
+    }
+  };
 
   const handleAddSkill = async () => {
     try {
@@ -39,6 +85,18 @@ const ProfilePage = () => {
       setProficiencyLevel("beginner");
     } catch (error) {
       console.error("Error adding skill:", error);
+    }
+  };
+
+  const handleAddSkillToProject = async () => {
+    try {
+      await axios.post('http://localhost:5000/project-skills', {
+        project_id: selectedProject,
+        skill_id: selectedSkill
+      });
+      alert('Skill added to project successfully');
+    } catch (error) {
+      console.error('Error adding skill to project:', error);
     }
   };
 
@@ -93,30 +151,76 @@ const ProfilePage = () => {
 
           <div className="projects-section">
             <h3>My Projects</h3>
-            <div className="project">
-              <h4>E-commerce Platform Development</h4>
-              <p>
-                Developed a scalable e-commerce platform with a team of 5,
-                focusing on backend services and database management.
-              </p>
-              <p>
-                <strong>Role:</strong> Backend Developer |{" "}
-                <strong>Status:</strong> In progress
-              </p>
-              <button className="view-project-btn">View Project</button>
-            </div>
-            <div className="project">
-              <h4>Community Health App</h4>
-              <p>
-                Designed a mobile application to track community health metrics
-                and provide real-time updates.
-              </p>
-              <p>
-                <strong>Role:</strong> UX Designer | <strong>Status:</strong>{" "}
-                Completed
-              </p>
-              <button className="view-project-btn">View Project</button>
-            </div>
+            <ul>
+              {projects.map((project) => (
+                  <li key={project.project_id}>
+                    <h4>{project.title}</h4>
+                    <p>{project.description}</p>
+                    <p><strong>Status:</strong> {project.status}</p>
+                    <button className="view-project-btn">View Project</button>
+                  </li>
+              ))}
+            </ul>
+            <h4>Add New Project</h4>
+            <form onSubmit={(e) => { e.preventDefault(); handleAddProject(); }}>
+              <input
+                  type="text"
+                  name="title"
+                  value={newProject.title}
+                  onChange={handleInputChange}
+                  placeholder="Title"
+                  required
+              />
+              <textarea
+                  name="description"
+                  value={newProject.description}
+                  onChange={handleInputChange}
+                  placeholder="Description"
+                  required
+              />
+              <select
+                  name="status"
+                  value={newProject.status}
+                  onChange={handleInputChange}
+                  required
+              >
+                <option value="open">Open</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+              </select>
+              <button type="submit">Add Project</button>
+            </form>
+          </div>
+
+          <div className="add-skill-to-project-section">
+            <h4>Add Skill to Project</h4>
+            <form onSubmit={(e) => { e.preventDefault(); handleAddSkillToProject(); }}>
+              <select
+                  value={selectedProject}
+                  onChange={(e) => setSelectedProject(e.target.value)}
+                  required
+              >
+                <option value="">Select Project</option>
+                {projects.map((project) => (
+                    <option key={project.project_id} value={project.project_id}>
+                      {project.title}
+                    </option>
+                ))}
+              </select>
+              <select
+                  value={selectedSkill}
+                  onChange={(e) => setSelectedSkill(e.target.value)}
+                  required
+              >
+                <option value="">Select Skill</option>
+                {availableSkills.map((skill) => (
+                    <option key={skill.skill_id} value={skill.skill_id}>
+                      {skill.skill_name}
+                    </option>
+                ))}
+              </select>
+              <button type="submit">Add Skill to Project</button>
+            </form>
           </div>
 
           <div className="contributions-section">
