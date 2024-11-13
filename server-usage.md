@@ -147,6 +147,17 @@ Here is the documentation for all the endpoints in `server.py`:
 **Responses:**
 - `200 OK`: Returns a list of collaborators for the project.
 
+### Get Project Details
+**Endpoint:** `/project/<int:project_id>`  
+**Method:** `GET`  
+**Description:** Retrieves details of a specific project. 
+**Path Parameters:**
+- `project_id`: The ID of the project.
+
+**Responses:**
+- `200 OK`: Returns the project details.
+
+
 ### List User Projects
 **Endpoint:** `/user-projects/<int:user_id>`  
 **Method:** `GET`  

@@ -72,12 +72,12 @@ function ProjectDetailsPage() {
                 <h4>Skills</h4>
                 {skills.map(skill => (
                     <label key={skill}>
+                      <span>{skill}</span>
                       <input
                           type="checkbox"
                           checked={selectedSkills.includes(skill)}
                           onChange={() => handleSkillChange(skill)}
                       />
-                      <span>{skill}</span>
                     </label>
                 ))}
               </section>
@@ -85,12 +85,12 @@ function ProjectDetailsPage() {
                 <h4>Project Status</h4>
                 {statuses.map(status => (
                     <label key={status}>
+                      <span>{status}</span>
                       <input
                           type="checkbox"
                           checked={selectedStatuses.includes(status)}
                           onChange={() => handleStatusChange(status)}
                       />
-                      <span>{status}</span>
                     </label>
                 ))}
               </section>
@@ -102,7 +102,7 @@ function ProjectDetailsPage() {
               </header>
 
               <div className="project-cards">
-                {filteredProjects.map((project) => (
+              {filteredProjects.map((project) => (
                     <div key={project.project_id} className="project-card">
                       <h3>{project.title}</h3>
                       <p>{project.description}</p>

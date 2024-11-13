@@ -361,9 +361,44 @@ def list_skills():
         cursor.close()
         conn.close()
 
+# Endpoint to get project details
+@app.route("/project-details/<int:project_id>", methods=["GET"])
+def get_project_details(project_id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Get project details
+        cursor.execute(
+            """
+            SELECT Projects.project_id, Projects.title, Projects.description, Projects.creator_id, Projects.status, Users.username AS creator_username
+            FROM Projects
+            JOIN Users ON Projects.creator_id = Users.user_id
+            WHERE Projects.project_id = %s
+            """,
+            (project_id,),
+        )
+        project = cursor.fetchone()
+
+        # Get skills for the project
+        cursor.execute(
+            """
+            SELECT Skills.skill_id, Skills.skill_name
+            FROM ProjectSkills
+            JOIN Skills ON ProjectSkills.skill_id = Skills.skill_id
+            WHERE ProjectSkills.project_id = %s
+            """,
+            (project_id,),
+        )
+        skills = cursor.fetchall()
+        project["skills"] = [[skill["skill_id"], skill["skill_name"]] for skill in skills]
+
+        return jsonify(project), 200
+    finally:
+        cursor.close()
+        conn.close()
+
 # Endpoint to list all projects
-# Endpoint to list all projects
-@app.route("/projects", methods=["GET"])
 @app.route("/projects", methods=["GET"])
 def list_projects():
     try:
@@ -398,6 +433,7 @@ def list_projects():
     finally:
         cursor.close()
         conn.close()
+
 # Endpoint to list all users
 @app.route("/users", methods=["GET"])
 def list_users():

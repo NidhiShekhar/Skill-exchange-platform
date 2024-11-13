@@ -32,18 +32,20 @@
 }
 
 .filters label {
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 5px;
 }
 
-.filters label input {
-  grid-column: 1;
+.filters label span {
+  flex: 1;
+  margin-right: 10px;
+  min-width: 150px; /* Adjust this value as needed */
 }
 
-.filters label span {
-  grid-column: 2;
+.filters label input {
+  margin-left: 10px;
 }
 
 .project-explorer {
