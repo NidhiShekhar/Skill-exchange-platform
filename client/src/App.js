@@ -6,7 +6,8 @@ import AboutUsPage from "./pages/AboutUsPage";
 import LoginPage from "./pages/LoginPage";
 import Skills from "./pages/Skills";
 import SignupPage from "./pages/SignupPage";
-import SkillDetails from "./pages/SkillDetails"; // Import SkillDetails
+import SkillDetails from "./pages/SkillDetails";// Import SkillDetails
+import ProjectPage from "./pages/ProjectPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/skills" element={<Skills />} />
           <Route path="/register" element={<SignupPage />} />
           <Route path="/skill-details/:skill_id" element={<SkillDetails />} /> {/* Add new route */}
+            <Route path="/project" element={<ProjectPage />} />
         </Routes>
       </Router>
   );

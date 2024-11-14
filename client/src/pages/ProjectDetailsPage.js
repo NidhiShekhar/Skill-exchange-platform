@@ -53,6 +53,10 @@ function ProjectDetailsPage() {
       (searchQuery === "" || project.title.toLowerCase().includes(searchQuery.toLowerCase()) || project.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  const handleViewDetails = (project_id) => {
+    navigate("/project", { state: { project_id, user_id, username } });
+  };
+
   return (
       <>
         <Navbar user_id={user_id} username={username} />
@@ -102,7 +106,7 @@ function ProjectDetailsPage() {
               </header>
 
               <div className="project-cards">
-              {filteredProjects.map((project) => (
+                {filteredProjects.map((project) => (
                     <div key={project.project_id} className="project-card">
                       <h3>{project.title}</h3>
                       <p>{project.description}</p>
@@ -114,7 +118,7 @@ function ProjectDetailsPage() {
                       {project.status}
                     </span>
                       </div>
-                      <button className="view-details-btn">View Details</button>
+                      <button className="view-details-btn" onClick={() => handleViewDetails(project.project_id)}>View Details</button>
                     </div>
                 ))}
               </div>

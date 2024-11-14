@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import "./SkillDetails.css";
 
@@ -11,6 +11,7 @@ function SkillDetails() {
     const username = location.state?.username;
     const [skill, setSkill] = useState({});
     const [users, setUsers] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchSkillDetails = async () => {
@@ -35,6 +36,10 @@ function SkillDetails() {
         fetchUsersWithSkill();
     }, [skill_id]);
 
+    const handleUserClick = (user) => {
+        navigate("/profilepage", { state: { user_id: user.user_id, username: user.username, isViewingAnotherUser: true } });
+    };
+
     return (
         <>
             <Navbar user_id={user_id} username={username} />
@@ -44,7 +49,7 @@ function SkillDetails() {
                 <h3>Users with this skill</h3>
                 <div>
                     {users.map((user) => (
-                        <div key={user.user_id} className="user-box">
+                        <div key={user.user_id} className="user-box" onClick={() => handleUserClick(user)}>
                             <div className="username">{user.username}</div>
                             <div className="proficiency">{user.proficiency_level}</div>
                         </div>

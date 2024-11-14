@@ -3,12 +3,14 @@ import axios from "axios";
 import "./ProfilePage.css";
 import Navbar from "./Navbar";
 import profileImage from "../assets/profilepage.png"; // Import the image
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const user_id = location.state?.user_id;
   const username = location.state?.username;
+  const isViewingAnotherUser = location.state?.isViewingAnotherUser;
 
   const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
@@ -100,6 +102,10 @@ const ProfilePage = () => {
     }
   };
 
+  const handleViewProject = (project_id) => {
+    navigate("/project", { state: { project_id, user_id, username } });
+  };
+
   return (
       <>
         <Navbar user_id={user_id} username={username} />
@@ -116,7 +122,9 @@ const ProfilePage = () => {
                 Software Engineer passionate about building impactful applications
                 and exploring new technologies.
               </p>
-              <button className="edit-profile-btn">Edit Profile</button>
+              {!isViewingAnotherUser && (
+                  <button className="edit-profile-btn">Edit Profile</button>
+              )}
             </div>
           </div>
 
@@ -128,24 +136,28 @@ const ProfilePage = () => {
                 {skill.skill_name} ({skill.proficiency_level})
               </span>
               ))}
-              <input
-                  type="text"
-                  placeholder="New Skill"
-                  value={newSkill}
-                  onChange={(e) => setNewSkill(e.target.value)}
-              />
-              <select
-                  value={proficiencyLevel}
-                  onChange={(e) => setProficiencyLevel(e.target.value)}
-              >
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-                <option value="expert">Expert</option>
-              </select>
-              <button className="add-skill-btn" onClick={handleAddSkill}>
-                Add Skill
-              </button>
+              {!isViewingAnotherUser && (
+                  <>
+                    <input
+                        type="text"
+                        placeholder="New Skill"
+                        value={newSkill}
+                        onChange={(e) => setNewSkill(e.target.value)}
+                    />
+                    <select
+                        value={proficiencyLevel}
+                        onChange={(e) => setProficiencyLevel(e.target.value)}
+                    >
+                      <option value="beginner">Beginner</option>
+                      <option value="intermediate">Intermediate</option>
+                      <option value="advanced">Advanced</option>
+                      <option value="expert">Expert</option>
+                    </select>
+                    <button className="add-skill-btn" onClick={handleAddSkill}>
+                      Add Skill
+                    </button>
+                  </>
+              )}
             </div>
           </div>
 
@@ -157,71 +169,77 @@ const ProfilePage = () => {
                     <h4>{project.title}</h4>
                     <p>{project.description}</p>
                     <p><strong>Status:</strong> {project.status}</p>
-                    <button className="view-project-btn">View Project</button>
+                    <button className="view-project-btn" onClick={() => handleViewProject(project.project_id)}>View Project</button>
                   </li>
               ))}
             </ul>
-            <h4>Add New Project</h4>
-            <form onSubmit={(e) => { e.preventDefault(); handleAddProject(); }}>
-              <input
-                  type="text"
-                  name="title"
-                  value={newProject.title}
-                  onChange={handleInputChange}
-                  placeholder="Title"
-                  required
-              />
-              <textarea
-                  name="description"
-                  value={newProject.description}
-                  onChange={handleInputChange}
-                  placeholder="Description"
-                  required
-              />
-              <select
-                  name="status"
-                  value={newProject.status}
-                  onChange={handleInputChange}
-                  required
-              >
-                <option value="open">Open</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
-              </select>
-              <button type="submit">Add Project</button>
-            </form>
+            {!isViewingAnotherUser && (
+                <>
+                  <h4>Add New Project</h4>
+                  <form onSubmit={(e) => { e.preventDefault(); handleAddProject(); }}>
+                    <input
+                        type="text"
+                        name="title"
+                        value={newProject.title}
+                        onChange={handleInputChange}
+                        placeholder="Title"
+                        required
+                    />
+                    <textarea
+                        name="description"
+                        value={newProject.description}
+                        onChange={handleInputChange}
+                        placeholder="Description"
+                        required
+                    />
+                    <select
+                        name="status"
+                        value={newProject.status}
+                        onChange={handleInputChange}
+                        required
+                    >
+                      <option value="open">Open</option>
+                      <option value="in_progress">In Progress</option>
+                      <option value="completed">Completed</option>
+                    </select>
+                    <button type="submit">Add Project</button>
+                  </form>
+                </>
+            )}
           </div>
 
-          <div className="add-skill-to-project-section">
-            <h4>Add Skill to Project</h4>
-            <form onSubmit={(e) => { e.preventDefault(); handleAddSkillToProject(); }}>
-              <select
-                  value={selectedProject}
-                  onChange={(e) => setSelectedProject(e.target.value)}
-                  required
-              >
-                <option value="">Select Project</option>
-                {projects.map((project) => (
-                    <option key={project.project_id} value={project.project_id}>
-                      {project.title}
-                    </option>
-                ))}
-              </select>
-              <select
-                  value={selectedSkill}
-                  onChange={(e) => setSelectedSkill(e.target.value)}
-                  required
-              >
-                <option value="">Select Skill</option>
-                {availableSkills.map((skill) => (
-                    <option key={skill.skill_id} value={skill.skill_id}>
-                      {skill.skill_name}
-                    </option>
-                ))}
-              </select>
-              <button type="submit">Add Skill to Project</button>
-            </form>
-          </div>
+          {!isViewingAnotherUser && (
+              <div className="add-skill-to-project-section">
+                <h4>Add Skill to Project</h4>
+                <form onSubmit={(e) => { e.preventDefault(); handleAddSkillToProject(); }}>
+                  <select
+                      value={selectedProject}
+                      onChange={(e) => setSelectedProject(e.target.value)}
+                      required
+                  >
+                    <option value="">Select Project</option>
+                    {projects.map((project) => (
+                        <option key={project.project_id} value={project.project_id}>
+                          {project.title}
+                        </option>
+                    ))}
+                  </select>
+                  <select
+                      value={selectedSkill}
+                      onChange={(e) => setSelectedSkill(e.target.value)}
+                      required
+                  >
+                    <option value="">Select Skill</option>
+                    {availableSkills.map((skill) => (
+                        <option key={skill.skill_id} value={skill.skill_id}>
+                          {skill.skill_name}
+                        </option>
+                    ))}
+                  </select>
+                  <button type="submit">Add Skill to Project</button>
+                </form>
+              </div>
+          )}
 
           <div className="contributions-section">
             <h3>Contributions & Requests</h3>
@@ -250,7 +268,9 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          <button className="settings-btn">Settings</button>
+          {!isViewingAnotherUser && (
+              <button className="settings-btn">Settings</button>
+          )}
         </div>
       </>
   );

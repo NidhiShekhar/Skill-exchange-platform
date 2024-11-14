@@ -1,0 +1,36 @@
+.project-page-container {
+    padding: 20px;
+}
+
+.project-page-container h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.project-page-container p {
+    margin: 5px 0;
+}
+
+.project-page-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.project-page-container ul li {
+    background: #f0f0f0;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+.collaborate-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.collaborate-btn:hover {
+    background-color: #0056b3;
+}
