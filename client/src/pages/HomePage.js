@@ -1,13 +1,20 @@
 import React from "react";
 import "./HomePage.css";
 import Navbar from "./Navbar";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
 
-// Importing images
+// Importing carousel images
+import carousel1 from "../assets/carousel1.jpg";
+import carousel2 from "../assets/carousel2.jpg";
+import carousel3 from "../assets/carousel3.jpg";
+
+// Importing feature icons
 import icon1 from "../assets/icon1.png";
 import icon2 from "../assets/icon2.png";
 import icon3 from "../assets/icon3.png";
-import homepageImage from "../assets/homepage.png";
-import { useLocation, useNavigate } from "react-router-dom";// Import the homepage image
+
+import { useLocation, useNavigate } from "react-router-dom";
 
 function HomePage() {
   const location = useLocation();
@@ -15,26 +22,31 @@ function HomePage() {
   const user_id = location.state?.user_id;
   const username = location.state?.username;
   console.log(user_id, username);
+
   return (
     <div>
-      <Navbar user_id={user_id} username={username}/>
+      <Navbar user_id={user_id} username={username} />
 
-      <div className="home-container">
-        <div className="home-image">
-          <img src={homepageImage} alt="Homepage" />
+      <Carousel
+        showArrows={true}
+        infiniteLoop={true}
+        showThumbs={false}
+        autoPlay={true}
+        interval={3000}
+        className="home-carousel"
+      >
+        <div>
+          <img src={carousel1} alt="Slide 1" />
         </div>
-        <div className="home-content">
-          <h1>Collaborate, Learn & Grow</h1>
-          <p>
-            Find projects, enhance your skills, and gain real-world experience.
-          </p>
-          <div className="home-buttons">
-            <button className="join-now">Join Now</button>
-            <button className="learn-more">Learn More</button>
-          </div>
+        <div>
+          <img src={carousel2} alt="Slide 2" />
         </div>
-      </div>
+        <div>
+          <img src={carousel3} alt="Slide 3" />
+        </div>
+      </Carousel>
 
+      {/* Features Section */}
       <section className="features">
         <div className="feature">
           <img src={icon1} alt="Collaborate Icon" />
@@ -61,6 +73,7 @@ function HomePage() {
         </div>
       </section>
 
+      {/* How it Works Section */}
       <section className="how-it-works">
         <h2>How it works</h2>
         <div className="steps">

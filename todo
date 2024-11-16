@@ -12,3 +12,7 @@ this is frontend work
 2. do error handling on 409 error in login page (logging in with the wrong creds.)
 
 
+commit 1:
+handled error - 401 during login. unauthorized login now prompts an error message.
+added carousel in homepage and removed images from the "explore skills" page.
+

@@ -9,6 +9,7 @@ function LoginPage() {
     username: "",
     password: "",
   });
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -27,7 +28,11 @@ function LoginPage() {
       const { user_id } = response.data;
       navigate("/", { state: { user_id, username: formData.username } });
     } catch (error) {
-      console.error("Error during login:", error);
+      if (error.response && error.response.status === 401) {
+        setErrorMessage("Unauthorized: Incorrect username or password.");
+      } else {
+        console.error("Error during login:", error);
+      }
     }
   };
 
@@ -38,6 +43,7 @@ function LoginPage() {
           <div className="login-container">
             <h1 className="login-title">Welcome Back</h1>
             <p className="login-subtitle">Please sign in to continue</p>
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
             <form className="login-form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="username">Username</label>

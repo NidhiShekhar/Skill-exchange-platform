@@ -95,7 +95,6 @@ function Skills() {
                 <h2>Explore Skills</h2>
                 {skills.map((skill) => (
                     <div key={skill.skill_id} className="skill-card">
-                      <img src={`path/to/skill/image/${skill.skill_id}`} alt={skill.skill_name} />
                       <h3>{skill.skill_name}</h3>
                       <p>{skill.description}</p>
                       <button onClick={() => handleViewDetails(skill.skill_id)}>View Details</button>

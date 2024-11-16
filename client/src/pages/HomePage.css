@@ -18,7 +18,7 @@
 
 .navbar h1 {
   font-size: 1.5rem;
-  color: #000000; /* Matches the PESU Skill Exchange text color in the image */
+  color: #000000;
 }
 
 .navbar nav a {
@@ -29,7 +29,7 @@
 }
 
 .navbar nav a:hover {
-  color: #1a73e8; /* Adds hover effect similar to image */
+  color: #1a73e8;
 }
 
 /* Profile Section */
@@ -56,59 +56,16 @@
   text-decoration: underline;
 }
 
-/* HomePage Styles */
-.home-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: 100vh;
-  padding-right: 5%;
-  background-color: #f8f9fa;
+/* Carousel Section */
+.home-carousel .carousel .slide img {
+  max-height: 500px; /* Adjust based on desired height */
+  width: 100%;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
-.home-content {
-  text-align: right;
-  max-width: 650px;
-}
-
-.home-content h1 {
-  font-size: 3em;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.description {
-  font-size: 1.3em;
-  line-height: 1.5;
-  margin-bottom: 45px;
-}
-
-.home-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 40px;
-}
-
-.join-now,
-.learn-more {
-  padding: 8px 16px;
-  font-size: 1em;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  width: 120px;
-  align-self: center;
-}
-
-.join-now {
-  background-color: #007bff;
-  color: white;
-}
-
-.learn-more {
-  background-color: #6c757d;
-  color: white;
+.home-carousel {
+  margin-top: 20px;
 }
 
 /* Features Section */
@@ -133,8 +90,7 @@
 /* How it Works Section */
 .how-it-works {
   text-align: center;
-  padding: 0.6rem;
-  padding-bottom: 5rem;
+  padding: 2rem;
 }
 
 .how-it-works h2 {
@@ -145,8 +101,11 @@
 .steps {
   display: flex;
   justify-content: space-around;
-  align-items: flex-start;
-  padding-left: 3.7rem;
+  padding: 0 2rem;
+}
+
+.step {
+  max-width: 150px;
 }
 
 .step h3 {

@@ -94,3 +94,11 @@ body {
 .register-link a:hover {
   text-decoration: underline;
 }
+
+/* LoginPage.css */
+.error-message {
+  color: red;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
