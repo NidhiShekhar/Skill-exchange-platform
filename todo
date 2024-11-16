@@ -16,3 +16,5 @@ commit 1:
 handled error - 401 during login. unauthorized login now prompts an error message.
 added carousel in homepage and removed images from the "explore skills" page.
 
+commit 2:
+fixed the "about us" page ui

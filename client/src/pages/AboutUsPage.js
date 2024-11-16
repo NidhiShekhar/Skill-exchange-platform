@@ -2,51 +2,106 @@ import React from "react";
 import Navbar from "./Navbar";
 import "./AboutUsPage.css";
 
+// Importing images for the reviews
+import user1 from "../assets/mentor1.jpeg";
+import user2 from "../assets/mentor2.jpeg";
+import user3 from "../assets/mentor3.jpeg";
+
 function AboutUsPage() {
   return (
     <div className="about-us-container">
       <Navbar />
 
-      <section className="mission-section">
-        <h2>Our Mission</h2>
-        <p>
-          Our mission is to empower individuals by providing a platform where
-          they can showcase their skills, contribute to meaningful projects, and
-          develop new competencies. We aim to cultivate a community of learners,
-          doers, and innovators who are passionate about making an impact.
-        </p>
-      </section>
+      {/* Mission Section */}
+      <div className="info-section left-aligned">
+        <div className="info-card">
+          <h2>Our Mission</h2>
+          <p>
+            Empowering individuals by creating opportunities to collaborate,
+            learn, and grow together in meaningful projects.
+          </p>
+        </div>
+      </div>
 
-      <section className="how-it-works-section">
-        <h2>How It Works</h2>
-        <p>
-          PESU Skill Exchange allows users to post projects, list skills, and
-          collaborate with others based on shared interests and expertise.
-          Whether you’re looking to gain experience, find collaborators, or
-          contribute your skills to exciting projects, PESU Skill Exchange
-          provides the tools and support to make it happen.
-        </p>
-      </section>
+      {/* How It Works Section */}
+      <div className="info-section right-aligned">
+        <div className="info-card">
+          <h2>How It Works</h2>
+          <p>
+            Connect, collaborate, and grow with peers by finding and
+            contributing to skill-driven projects.
+          </p>
+        </div>
+      </div>
 
+      {/* Why Choose Us Section */}
+      <div className="info-section left-aligned">
+        <div className="info-card">
+          <h2>Why Choose Us?</h2>
+          <p>We provide a platform where creativity meets collaboration.</p>
+          <p>
+            Build your network, gain hands-on experience, and grow with a
+            vibrant community of like-minded individuals.
+          </p>
+        </div>
+      </div>
+
+      {/* What We Offer Section */}
+      <div className="info-section right-aligned">
+        <div className="info-card">
+          <h2>What We Offer</h2>
+          <p>
+            From personalized project matches to mentorship and real-world
+            experiences, PESU Skill Exchange is here to guide you every step of
+            the way.
+          </p>
+        </div>
+      </div>
+
+      {/* Our Values Section */}
       <section className="values-section">
         <h2>Our Values</h2>
-        <ul>
-          <li>
-            <strong>Collaboration:</strong> We believe in the power of teamwork
-            and the value of sharing knowledge and skills.
-          </li>
-          <li>
-            <strong>Growth:</strong> We encourage personal and professional
-            growth through hands-on experiences and real-world projects.
-          </li>
-          <li>
-            <strong>Innovation:</strong> We foster an environment that
-            encourages creativity, problem-solving, and a drive for positive
-            change.
-          </li>
-        </ul>
+        <div className="values-grid">
+          <div className="value-card">
+            <h3>Collaboration</h3>
+            <p>We believe in the power of teamwork and shared knowledge.</p>
+          </div>
+          <div className="value-card">
+            <h3>Growth</h3>
+            <p>Encouraging personal and professional development.</p>
+          </div>
+          <div className="value-card">
+            <h3>Innovation</h3>
+            <p>Fostering creativity and a drive for positive change.</p>
+          </div>
+        </div>
       </section>
 
+      {/* Reviews Section */}
+      <section className="reviews-section">
+        <h2>What Our Mentors Say</h2>
+        <div className="review-cards">
+          <div className="review-card">
+            <img src={user1} alt="John Doe" />
+            <h4>John Doe</h4>
+            <p>“An incredible platform to work with talented peers!”</p>
+          </div>
+          <div className="review-card">
+            <img src={user2} alt="Jane Smith" />
+            <h4>Jane Smith</h4>
+            <p>
+              “The projects helped students and myself grow professionally!”
+            </p>
+          </div>
+          <div className="review-card">
+            <img src={user3} alt="Alex Johnson" />
+            <h4>Alex Johnson</h4>
+            <p>“A community that values collaboration and innovation.”</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
       <section className="contact-section">
         <h2>Contact Us</h2>
         <p>
