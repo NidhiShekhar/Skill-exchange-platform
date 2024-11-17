@@ -37,7 +37,7 @@ function SkillDetails() {
     }, [skill_id]);
 
     const handleUserClick = (user) => {
-        navigate("/profilepage", { state: { user_id: user.user_id, username: user.username, isViewingAnotherUser: true } });
+        navigate("/profilepage", { state: { user_id: user_id, username: username, isViewingAnotherUser: user.user_id, othername: user.username } });
     };
 
     return (

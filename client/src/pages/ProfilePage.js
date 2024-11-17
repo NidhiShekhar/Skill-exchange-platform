@@ -11,6 +11,10 @@ const ProfilePage = () => {
   const user_id = location.state?.user_id;
   const username = location.state?.username;
   const isViewingAnotherUser = location.state?.isViewingAnotherUser;
+  const uid = (!isViewingAnotherUser)? user_id : isViewingAnotherUser;
+  const othername = location.state?.othername;
+  const uname = (!isViewingAnotherUser)? username : othername;
+  console.log(location.state,uid);
 
   const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
@@ -19,7 +23,7 @@ const ProfilePage = () => {
   const [newProject, setNewProject] = useState({
     title: '',
     description: '',
-    creator_id: user_id,
+    creator_id: uid,
     status: 'open'
   });
   const [availableSkills, setAvailableSkills] = useState([]);
@@ -29,7 +33,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchSkills = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/user-skills/${user_id}`);
+        const response = await axios.get(`http://localhost:5000/user-skills/${uid}`);
         setSkills(response.data);
       } catch (error) {
         console.error("Error fetching skills:", error);
@@ -38,7 +42,7 @@ const ProfilePage = () => {
 
     const fetchProjects = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/user-projects/${user_id}`);
+        const response = await axios.get(`http://localhost:5000/user-projects/${uid}`);
         setProjects(response.data);
       } catch (error) {
         console.error("Error fetching projects:", error);
@@ -57,7 +61,7 @@ const ProfilePage = () => {
     fetchSkills();
     fetchProjects();
     fetchAvailableSkills();
-  }, [user_id]);
+  }, [uid]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -69,7 +73,7 @@ const ProfilePage = () => {
       const response = await axios.post('http://localhost:5000/projects', newProject);
       const { project_id } = response.data;
       setProjects([...projects, { ...newProject, project_id }]);
-      setNewProject({ title: '', description: '', creator_id: user_id, status: 'open' });
+      setNewProject({ title: '', description: '', creator_id: uid, status: 'open' });
     } catch (error) {
       console.error('Error adding project:', error);
     }
@@ -79,7 +83,7 @@ const ProfilePage = () => {
     try {
       await axios.post("http://localhost:5000/add-skill-to-user", {
         skill_name: newSkill,
-        user_id: user_id,
+        user_id: uid,
         proficiency_level: proficiencyLevel,
       });
       setSkills([...skills, { skill_name: newSkill, proficiency_level: proficiencyLevel }]);
@@ -117,7 +121,7 @@ const ProfilePage = () => {
                 className="profile-pic"
             />
             <div className="profile-info">
-              <h2>{username}</h2>
+              <h2>{uname}</h2>
               <p>
                 Software Engineer passionate about building impactful applications
                 and exploring new technologies.
