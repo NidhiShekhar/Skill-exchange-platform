@@ -1,7 +1,7 @@
 # Skill Exchange Platform
 
 ## Description
-This project is a web application built with React, Node.js, and SQL. It allows users to manage their skills and projects, including adding skills to projects and updating project statuses.
+This project is a web application built with React, Flask, and SQL. It allows users to manage their skills and projects, including adding skills to projects and updating project statuses.
 
 ## Features
 - User authentication (login and signup)
@@ -10,6 +10,8 @@ This project is a web application built with React, Node.js, and SQL. It allows 
 - Project management (add, view, update, and remove projects)
 - Add skills to projects
 - Responsive UI with a carousel on the homepage
+- Collaborative options
+- Reviewing projects
 
 ## Technologies Used
 - JavaScript
