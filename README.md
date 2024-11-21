@@ -9,6 +9,9 @@ This project is a web application built with React, Node.js, and SQL. It allows 
 - Skill management (add, view, and remove skills)
 - Project management (add, view, update, and remove projects)
 - Add skills to projects
+- Responsive UI with a carousel on the homepage
+- Collaborative options
+- Reviewing projects
 
 ## Technologies Used
 - JavaScript
