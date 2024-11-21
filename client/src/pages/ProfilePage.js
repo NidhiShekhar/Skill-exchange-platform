@@ -3,7 +3,7 @@ import axios from "axios";
 import "./ProfilePage.css";
 import Navbar from "./Navbar";
 import profileImage from "../assets/profilepage.png"; // Import the image
-import { useLocation, useNavigate } from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 
 const ProfilePage = () => {
   const location = useLocation();
@@ -31,6 +31,7 @@ const ProfilePage = () => {
       try {
         const response = await axios.get(`http://localhost:5000/user-skills/${user_id}`);
         setSkills(response.data);
+        console.log("Skills:", response.data);
       } catch (error) {
         console.error("Error fetching skills:", error);
       }
@@ -106,6 +107,22 @@ const ProfilePage = () => {
     navigate("/project", { state: { project_id, user_id, username } });
   };
 
+  const handleRemoveSkill = async (skill_id) => {
+    const updatedSkills = skills.filter(skill => skill.skill_id !== skill_id);
+    setSkills(updatedSkills);
+
+    try {
+      console.log('Deleting skill:', skill_id);
+      console.log('User ID:', user_id);
+      await axios.post('http://localhost:5000/delete-skill-from-user', {
+         user_id: user_id, skill_id: skill_id
+      });
+    } catch (error) {
+      console.error('Error removing skill:', error);
+      setSkills(skills); // Revert state if API call fails
+    }
+  };
+
   return (
       <>
         <Navbar user_id={user_id} username={username} />
@@ -123,7 +140,10 @@ const ProfilePage = () => {
                 and exploring new technologies.
               </p>
               {!isViewingAnotherUser && (
-                  <button className="edit-profile-btn">Edit Profile</button>
+                  <div className="profile-buttons">
+                    <button className="edit-profile-btn">Edit Profile</button>
+                    <Link to="/notifications" state={{ "user_id":user_id, "username":username }}>Notifications</Link>
+                  </div>
               )}
             </div>
           </div>
@@ -134,6 +154,7 @@ const ProfilePage = () => {
               {skills.map((skill, index) => (
                   <span key={index} className="skill">
                 {skill.skill_name} ({skill.proficiency_level})
+                <button className="remove-skill-btn" onClick={() => handleRemoveSkill(skill.skill_id)}>x</button>
               </span>
               ))}
               {!isViewingAnotherUser && (
@@ -267,10 +288,6 @@ const ProfilePage = () => {
               </a>
             </div>
           </div>
-
-          {!isViewingAnotherUser && (
-              <button className="settings-btn">Settings</button>
-          )}
         </div>
       </>
   );

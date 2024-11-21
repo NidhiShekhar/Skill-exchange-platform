@@ -11,7 +11,7 @@ def get_db_connection():
     with open(".passwd.txt", "r") as file:
         passwd = file.read().strip()
     return mysql.connector.connect(
-        host="bar0n.live", user="skill_exchange", password=passwd, database="skill_exchange_platform"
+        host="192.168.1.3", user="skill_exchange", password=passwd, database="skill_exchange_platform"
     )
 
 
@@ -65,7 +65,7 @@ def login():
         if user and bcrypt.checkpw(
             password.encode("utf-8"), user["password_hash"].encode("utf-8")
         ):
-            return jsonify({"user_id": user["user_id"]}), 200
+            return jsonify({"user_id": user["user_id"], "role": user["role"]}), 200
         return jsonify({"error": "Invalid credentials"}), 401
     finally:
         cursor.close()
@@ -259,7 +259,7 @@ def add_project_skill():
         cursor.close()
         conn.close()
 
-
+#Endpoint to add a new collaboration to the project
 @app.route("/collaborations", methods=["POST"])
 def add_collaboration():
     data = request.json
@@ -455,7 +455,7 @@ def list_user_skills(user_id):
         cursor = conn.cursor(dictionary=True)
         cursor.execute(
             """
-            SELECT Skills.skill_name, UserSkills.proficiency_level
+            SELECT Skills.skill_name, UserSkills.proficiency_level, Skills.skill_id
             FROM UserSkills
             JOIN Skills ON UserSkills.skill_id = Skills.skill_id
             WHERE UserSkills.user_id = %s
@@ -464,6 +464,227 @@ def list_user_skills(user_id):
         )
         user_skills = cursor.fetchall()
         return jsonify(user_skills), 200
+    finally:
+        cursor.close()
+        conn.close()
+
+# Endpoint to list all skills of a specific project
+@app.route("/project-skills/<int:project_id>", methods=["GET"])
+def list_project_skills(project_id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            """
+            SELECT Skills.skill_id, Skills.skill_name
+            FROM ProjectSkills
+            JOIN Skills ON ProjectSkills.skill_id = Skills.skill_id
+            WHERE ProjectSkills.project_id = %s
+            """,
+            (project_id,),
+        )
+        project_skills = cursor.fetchall()
+        return jsonify(project_skills), 200
+    finally:
+        cursor.close()
+        conn.close()
+
+
+# Endpoint for Students to Request Role Upgrade
+@app.route("/request-upgrade", methods=["POST"])
+def request_upgrade():
+    data = request.json
+    user_id = data.get("user_id")
+
+    if not user_id:
+        return jsonify({"error": "User ID is required."}), 400
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE Users SET role = 'mentor' WHERE user_id = %s AND role = 'student'",
+            (user_id,)
+        )
+        conn.commit()
+        return jsonify({"message": "Role upgrade request submitted successfully."}), 201
+    finally:
+        cursor.close()
+        conn.close()
+
+# Endpoint for Admins to Approve Role Upgrade
+@app.route("/approve-upgrade", methods=["POST"])
+def approve_upgrade():
+    data = request.json
+    user_id = data.get("user_id")
+    admin_id = data.get("admin_id")
+
+    if not user_id or not admin_id:
+        return jsonify({"error": "User ID and Admin ID are required."}), 400
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE Users SET role = 'mentor' WHERE user_id = %s AND role = 'student'",
+            (user_id,)
+        )
+        conn.commit()
+        return jsonify({"message": "Role upgrade approved successfully."}), 200
+    finally:
+        cursor.close()
+        conn.close()
+
+# Endpoint for Admins to Reject Role Upgrade
+@app.route("/reject-upgrade", methods=["POST"])
+def reject_upgrade():
+    data = request.json
+    user_id = data.get("user_id")
+    admin_id = data.get("admin_id")
+
+    if not user_id or not admin_id:
+        return jsonify({"error": "User ID and Admin ID are required."}), 400
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE Users SET role = 'student' WHERE user_id = %s AND role = 'student'",
+            (user_id,)
+        )
+        conn.commit()
+        return jsonify({"message": "Role upgrade rejected successfully."}), 200
+    finally:
+        cursor.close()
+        conn.close()
+
+
+
+# Endpoint to add a review (only mentors can post reviews)
+@app.route("/add-review", methods=["POST"])
+def add_review():
+    data = request.json
+    reviewer_id = data.get("reviewer_id")
+    reviewee_id = data.get("reviewee_id")
+    project_id = data.get("project_id")
+    rating = data.get("rating")
+    review_text = data.get("review_text")
+
+    if not all([reviewer_id, reviewee_id, project_id, rating, review_text]):
+        return jsonify({"error": "All fields are required."}), 400
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT role FROM Users WHERE user_id = %s", (reviewer_id,))
+        user = cursor.fetchone()
+
+        if user["role"] != "mentor":
+            return jsonify({"error": "Only mentors can post reviews."}), 403
+
+        cursor.execute(
+            "INSERT INTO Reviews (reviewer_id, reviewee_id, project_id, rating, review_text) VALUES (%s, %s, %s, %s, %s)",
+            (reviewer_id, reviewee_id, project_id, rating, review_text),
+        )
+        conn.commit()
+
+        # Create a notification for the reviewee
+        cursor.execute(
+            "INSERT INTO Notifications (user_id, content, notification_type) VALUES (%s, %s, %s)",
+            (reviewee_id, f"You received a review from mentor {reviewer_id}: {review_text} (Rating: {rating})", "review"),
+        )
+        conn.commit()
+
+        return jsonify({"message": "Review added successfully."}), 201
+    finally:
+        cursor.close()
+        conn.close()
+
+# Endpoint to delete a skill from a user profile
+@app.route("/delete-skill-from-user", methods=["post"])
+def delete_skill_from_user():
+    data = request.json
+    user_id = data.get("user_id")
+    skill_id = data.get("skill_id")
+    print(user_id, skill_id)
+    if not all([user_id, skill_id]):
+        return jsonify({"error": "User ID and Skill ID are required."}), 400
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Check if the user exists
+        cursor.execute("SELECT user_id FROM Users WHERE user_id = %s", (user_id,))
+        if cursor.fetchone() is None:
+            return jsonify({"error": "User not found."}), 404
+
+        # Check if the skill exists for the user
+        cursor.execute(
+            "SELECT * FROM UserSkills WHERE user_id = %s AND skill_id = %s",
+            (user_id, skill_id),
+        )
+        if cursor.fetchone() is None:
+            return jsonify({"error": "Skill not found for the user."}), 404
+
+        # Delete the skill from the user's profile
+        cursor.execute(
+            "DELETE FROM UserSkills WHERE user_id = %s AND skill_id = %s",
+            (user_id, skill_id),
+        )
+        conn.commit()
+        return jsonify({"message": "Skill deleted successfully from user profile."}), 200
+    finally:
+        cursor.close()
+        conn.close()
+
+# Endpoint to list all reviews of a specific user
+# Endpoint to Fetch Notifications
+@app.route('/notifications', methods=['GET'])
+def get_notifications():
+    user_id = request.args.get('user_id')
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM Notifications WHERE user_id = %s", (user_id,))
+        notifications = cursor.fetchall()
+        return jsonify(notifications), 200
+    finally:
+        cursor.close()
+        conn.close()
+
+# Endpoint to Approve Collaboration
+@app.route('/approve-collaboration', methods=['POST'])
+def approve_collaboration():
+    data = request.json
+    notification_id = data['notificationId']
+    project_id = data['projectId']
+    user_id = request.args.get('user_id')
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE Collaborations SET status = 'accepted' WHERE project_id = %s AND user_id = %s", (project_id, user_id))
+        cursor.execute("DELETE FROM Notifications WHERE id = %s", (notification_id,))
+        conn.commit()
+        return jsonify({'message': 'Collaboration approved'}), 200
+    finally:
+        cursor.close()
+        conn.close()
+
+
+# Endpoint to Deny Collaboration
+@app.route('/deny-collaboration', methods=['POST'])
+def deny_collaboration():
+    data = request.json
+    notification_id = data['notificationId']
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM Notifications WHERE id = %s", (notification_id,))
+        conn.commit()
+        return jsonify({'message': 'Collaboration denied'}), 200
     finally:
         cursor.close()
         conn.close()

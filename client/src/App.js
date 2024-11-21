@@ -8,6 +8,7 @@ import Skills from "./pages/Skills";
 import SignupPage from "./pages/SignupPage";
 import SkillDetails from "./pages/SkillDetails";// Import SkillDetails
 import ProjectPage from "./pages/ProjectPage";
+import NotificationsPage from "./pages/NotificationsPage";
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
           <Route path="/register" element={<SignupPage />} />
           <Route path="/skill-details/:skill_id" element={<SkillDetails />} /> {/* Add new route */}
             <Route path="/project" element={<ProjectPage />} />
+            <Route path="/notifications" element={<NotificationsPage />} />
+
         </Routes>
       </Router>
   );

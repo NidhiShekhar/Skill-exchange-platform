@@ -15,6 +15,7 @@ function ProjectDetailsPage() {
   const navigate = useNavigate();
   const user_id = location.state?.user_id;
   const username = location.state?.username;
+  const role = location.state?.role; // Get the role from location state
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -34,6 +35,40 @@ function ProjectDetailsPage() {
 
     fetchProjects();
   }, []);
+
+  const handleCollaborate = async (project_id) => {
+    try {
+      console.log(user_id, project_id);
+      const response = await axios.post("http://localhost:5000/collaborate", {
+        user_id: user_id,
+        project_id: project_id
+      });
+      if (response.status === 201) {
+        alert("Collaboration request sent successfully");
+      }
+    } catch (error) {
+      console.error("Error sending collaboration request:", error);
+    }
+  };
+
+  const handleReviewSubmit = async (e, project_id, creator_id) => {
+    e.preventDefault();
+    const review = {
+      reviewer_id: user_id,
+      reviewee_id: creator_id, // Assuming project.creator_id is the user being reviewed
+      project_id: project_id,
+      rating: e.target.rating.value,
+      review_text: e.target.review_text.value
+    };
+    try {
+      const response = await axios.post("http://localhost:5000/add-review", review);
+      if (response.status === 201) {
+        alert("Review added successfully");
+      }
+    } catch (error) {
+      console.error("Error adding review:", error);
+    }
+  };
 
   const handleSkillChange = (skill) => {
     setSelectedSkills(prev =>
@@ -119,6 +154,22 @@ function ProjectDetailsPage() {
                     </span>
                       </div>
                       <button className="view-details-btn" onClick={() => handleViewDetails(project.project_id)}>View Details</button>
+                      {role === "user" && (
+                          <button className="collaborate-button" onClick={() => handleCollaborate(project.project_id)}>Collaborate</button>
+                      )}
+                      {role === "mentor" && (
+                          <form onSubmit={(e) => handleReviewSubmit(e, project.project_id, project.creator_id)}>
+                            <label>
+                              Rating:
+                              <input type="number" name="rating" min="1" max="5" required />
+                            </label>
+                            <label>
+                              Review:
+                              <textarea name="review_text" required />
+                            </label>
+                            <button type="submit" className="rating-review-button">Submit Review</button>
+                          </form>
+                      )}
                     </div>
                 ))}
               </div>

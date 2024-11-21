@@ -26,6 +26,22 @@ function ProjectPage() {
         return <div>Loading...</div>;
     }
 
+    const handleCollaborate = async (project_id) => {
+        try {
+            console.log(user_id, project_id);
+            const response = await axios.post("http://localhost:5000/collaborations", {
+                user_id: user_id,
+                project_id: project_id,
+                role: "Student"
+            });
+            if (response.status === 201) {
+                alert("Collaboration request sent successfully");
+            }
+        } catch (error) {
+            console.error("Error sending collaboration request:", error);
+        }
+    };
+
     return (
         <>
             <Navbar user_id={user_id} username={username} />
@@ -42,7 +58,7 @@ function ProjectPage() {
                         ))}
                     </ul>
                 </div>
-                <button className="collaborate-btn">Collaborate</button>
+                <button className="collaborate-btn" onClick={() => handleCollaborate(project.project_id)}>Collaborate</button>
             </div>
         </>
     );

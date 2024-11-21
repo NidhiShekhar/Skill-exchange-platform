@@ -202,6 +202,32 @@ END //
 
 -- 3. Example Triggers
 
+-- Trigger to create notification when a new collaboration request is added
+CREATE TRIGGER trg_collaboration_notification
+AFTER INSERT ON Collaborations
+FOR EACH ROW
+BEGIN
+    INSERT INTO Notifications (user_id, notification_type, content)
+    VALUES (
+        NEW.user_id,
+        '`project_invite',
+        CONCAT('You have a new collaboration request for project #', NEW.project_id)
+    );
+END //
+
+-- Trigger to create notification when a new review is requested
+CREATE TRIGGER trg_review_notification
+AFTER INSERT ON Reviews
+FOR EACH ROW
+BEGIN
+    INSERT INTO Notifications (user_id, notification_type, content)
+    VALUES (
+        NEW.reviewee_id,
+        'review_request',
+        CONCAT('You have a new review request for project #', NEW.project_id)
+    );
+END //
+
 -- Trigger to update project status when all collaborators complete
 CREATE TRIGGER trg_check_project_completion
 AFTER UPDATE ON Collaborations
@@ -220,19 +246,6 @@ BEGIN
         SET status = 'completed'
         WHERE project_id = NEW.project_id;
     END IF;
-END //
-
--- Trigger to create notification when new review is added
-CREATE TRIGGER trg_review_notification
-AFTER INSERT ON Reviews
-FOR EACH ROW
-BEGIN
-    INSERT INTO Notifications (user_id, notification_type, content)
-    VALUES (
-        NEW.reviewee_id,
-        'review_received',
-        CONCAT('You received a new review for project #', NEW.project_id)
-    );
 END //
 
 DELIMITER ;

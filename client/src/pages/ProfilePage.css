@@ -125,9 +125,22 @@
   color: #000;
 }
 
-.settings-btn {
+.profile-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.notifications-btn {
+  background-color: #ff4757; /* Bright red color */
+  color: white;
+  border: none;
   padding: 10px 20px;
-  font-size: 1em;
+  font-size: 16px;
   cursor: pointer;
-  align-self: flex-end;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.notifications-btn:hover {
+  background-color: #ff6b81; /* Slightly lighter red on hover */
 }
